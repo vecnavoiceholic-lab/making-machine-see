@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Making Machines See — CBSE Notes</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #f5f6fa;
+    color: #1a1a2e;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  header {
+    margin-bottom: 2rem;
+  }
+
+  header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a2e;
+    letter-spacing: -0.02em;
+  }
+
+  header p {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 4px;
+  }
+
+  /* CHIPS */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0.75rem 0; }
+  .chip {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 11px;
+    border-radius: 99px;
+    letter-spacing: 0.02em;
+  }
+  .chip-blue   { background: #dbeafe; color: #1e40af; }
+  .chip-teal   { background: #d1fae5; color: #065f46; }
+  .chip-purple { background: #ede9fe; color: #5b21b6; }
+  .chip-amber  { background: #fef3c7; color: #92400e; }
+  .chip-coral  { background: #ffe4e6; color: #9f1239; }
+
+  /* TABS */
+  .tab-bar {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    border-radius: 6px 6px 0 0;
+  }
+  .tab-btn:hover { color: #374151; background: #f3f4f6; }
+  .tab-btn.active { color: #2563eb; border-bottom-color: #2563eb; background: transparent; }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* CARDS */
+  .card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1.1rem 1.35rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  .card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 0.6rem;
+  }
+
+  ul.tight {
+    padding-left: 1.2rem;
+    font-size: 14px;
+    line-height: 1.85;
+    color: #374151;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #9ca3af;
+    margin: 1.4rem 0 0.6rem;
+  }
+
+  /* EXAM LINE */
+  .exam-line {
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+    border-radius: 0 8px 8px 0;
+    padding: 8px 12px;
+    font-size: 12.5px;
+    color: #92400e;
+    margin-top: 0.75rem;
+    font-style: italic;
+  }
+
+  /* COMPARE GRID */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 8px;
+  }
+  @media (max-width: 580px) { .compare-grid { grid-template-columns: 1fr; } }
+
+  .compare-card {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .compare-card .label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #9ca3af;
+    margin-bottom: 5px;
+  }
+  .compare-card .val { font-size: 13px; font-weight: 700; color: #111827; margin-bottom: 3px; }
+  .compare-card .desc { font-size: 12px; color: #6b7280; line-height: 1.5; }
+
+  /* TYPE GRID */
+  .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+  @media (max-width: 480px) { .type-grid { grid-template-columns: 1fr; } }
+  .type-box { border-radius: 10px; padding: 12px 14px; }
+  .type-box .type-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; }
+
+  /* PIPELINE STEPS */
+  .steps-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 0.75rem 0;
+  }
+  .step-box {
+    background: #dbeafe;
+    color: #1e40af;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 13px;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+  .step-arrow { color: #9ca3af; font-size: 18px; padding: 0 2px; font-weight: 300; }
+
+  /* DEF TABLE */
+  .def-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .def-table td { padding: 7px 10px; border-bottom: 1px solid #f3f4f6; vertical-align: top; }
+  .def-table td:first-child { font-weight: 700; width: 120px; color: #111827; white-space: nowrap; }
+  .def-table td:last-child { color: #4b5563; }
+  .def-table tr:last-child td { border-bottom: none; }
+
+  /* APPS */
+  .real-card {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+  }
+  .real-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+  .real-title { font-size: 13px; font-weight: 700; color: #111827; }
+  .real-desc { font-size: 12px; color: #6b7280; margin-top: 2px; line-height: 1.5; }
+
+  .apps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; margin-bottom: 1rem; }
+  .app-tile {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+  .app-tile .emoji { font-size: 18px; margin-bottom: 5px; }
+  .app-tile .t { font-weight: 700; color: #111827; }
+  .app-tile .d { font-size: 12px; color: #6b7280; margin-top: 2px; }
+
+  /* QUIZ */
+  .quiz-item {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1.1rem 1.35rem;
+    margin-bottom: 1rem;
+  }
+  .quiz-q { font-size: 14px; font-weight: 700; color: #111827; margin-bottom: 0.75rem; line-height: 1.5; }
+  .quiz-opt {
+    display: block;
+    width: 100%;
+    text-align: left;
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    margin-bottom: 7px;
+    cursor: pointer;
+    background: #fff;
+    color: #374151;
+    transition: background 0.12s, border-color 0.12s;
+    font-family: inherit;
+  }
+  .quiz-opt:hover:not(:disabled) { background: #f3f4f6; border-color: #9ca3af; }
+  .quiz-opt.correct { background: #d1fae5; border-color: #34d399; color: #065f46; font-weight: 600; }
+  .quiz-opt.wrong   { background: #fee2e2; border-color: #f87171; color: #7f1d1d; }
+  .quiz-feedback {
+    display: none;
+    font-size: 12.5px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    line-height: 1.5;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.pass { background: #d1fae5; color: #065f46; }
+  .quiz-feedback.fail { background: #fee2e2; color: #7f1d1d; }
+
+  .score-bar {
+    display: none;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    padding: 14px 18px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e40af;
+    margin-top: 1rem;
+  }
+
+  /* OVERVIEW special */
+  .core-idea {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #0c4a6e;
+    line-height: 1.7;
+    margin-top: 1rem;
+  }
+  .core-idea strong { font-weight: 700; }
+
+  /* QUICK REF */
+  .qref-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+  .qref-item { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px 14px; font-size: 13px; }
+  .qref-item .term { font-weight: 700; color: #111827; }
+  .qref-item .defn { color: #6b7280; font-size: 12px; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <h1>Making Machines See</h1>
+    <p>CBSE-style notes &nbsp;·&nbsp; Computer Vision &nbsp;·&nbsp; Exam-focused &amp; high-yield</p>
+  </header>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('overview',this)">Overview</button>
+    <button class="tab-btn" onclick="showTab('concepts',this)">Concepts</button>
+    <button class="tab-btn" onclick="showTab('process',this)">Process</button>
+    <button class="tab-btn" onclick="showTab('applications',this)">Applications</button>
+    <button class="tab-btn" onclick="showTab('quiz',this)">Quiz</button>
+  </div>
+
+  <!-- ═══════════════ OVERVIEW ═══════════════ -->
+  <div id="tab-overview" class="tab-content active">
+
+    <div class="card">
+      <h3>What is Computer Vision?</h3>
+      <ul class="tight">
+        <li>Branch of AI that enables machines to <strong>see, interpret, and act</strong> on visual data</li>
+        <li>Teaches computers to understand images the way humans do</li>
+        <li>Uses mathematical algorithms — not actual eyes or biological vision</li>
+      </ul>
+      <div class="exam-line">"Computer Vision is a field of AI that enables machines to derive meaningful information from digital images and videos."</div>
+    </div>
+
+    <div class="section-label">Key Terms — Chips</div>
+    <div class="chips">
+      <span class="chip chip-blue">Computer Vision</span>
+      <span class="chip chip-teal">Pixel</span>
+      <span class="chip chip-purple">Grayscale</span>
+      <span class="chip chip-amber">RGB Image</span>
+      <span class="chip chip-coral">Image Processing</span>
+      <span class="chip chip-blue">Feature Extraction</span>
+      <span class="chip chip-teal">Object Detection</span>
+      <span class="chip chip-purple">Classification</span>
+      <span class="chip chip-amber">Segmentation</span>
+      <span class="chip chip-coral">Occlusion</span>
+    </div>
+
+    <div class="core-idea">
+      <strong>Core Idea:</strong> Computers do <em>not</em> see images the way humans do.
+      They see <strong>grids of numbers</strong>. Each number = a pixel value.
+      All of Computer Vision is built on interpreting those numbers intelligently.
+    </div>
+
+    <div class="section-label">Quick Reference</div>
+    <div class="qref-grid">
+      <div class="qref-item"><div class="term">Computer Vision</div><div class="defn">AI field to interpret visual data</div></div>
+      <div class="qref-item"><div class="term">Pixel</div><div class="defn">Smallest unit of an image</div></div>
+      <div class="qref-item"><div class="term">Grayscale</div><div class="defn">Single-channel intensity image (0–255)</div></div>
+      <div class="qref-item"><div class="term">RGB</div><div class="defn">3-channel colour image (R, G, B values)</div></div>
+      <div class="qref-item"><div class="term">Occlusion</div><div class="defn">Object partially hidden in image</div></div>
+      <div class="qref-item"><div class="term">Segmentation</div><div class="defn">Dividing image into labelled regions</div></div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════ CONCEPTS ═══════════════ -->
+  <div id="tab-concepts" class="tab-content">
+
+    <div class="card">
+      <h3>Pixel — Smallest Unit of an Image</h3>
+      <ul class="tight">
+        <li>Every image = a 2D grid of pixels</li>
+        <li>Each pixel stores a <strong>number</strong> (intensity or colour value)</li>
+        <li>More pixels = higher resolution image</li>
+        <li>A 100×100 image has 10,000 pixels</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Image Types</h3>
+      <div class="type-grid">
+        <div class="type-box" style="background:#f3f4f6; border:1px solid #d1d5db;">
+          <div class="type-label" style="color:#6b7280;">Grayscale</div>
+          <ul class="tight" style="font-size:13px;">
+            <li>1 value per pixel</li>
+            <li>Range: 0 (black) → 255 (white)</li>
+            <li>Shades of grey only</li>
+            <li>e.g. X-ray, CCTV footage</li>
+          </ul>
+        </div>
+        <div class="type-box" style="background:#dbeafe; border:1px solid #93c5fd;">
+          <div class="type-label" style="color:#1e40af;">RGB (Colour)</div>
+          <ul class="tight" style="font-size:13px; color:#1e3a8a;">
+            <li>3 values per pixel (R, G, B)</li>
+            <li>Each channel: 0–255</li>
+            <li>(255, 0, 0) = pure red</li>
+            <li>e.g. photos, videos</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Why Convert to Grayscale?</h3>
+      <ul class="tight">
+        <li>Reduces data: 3 channels → 1 channel</li>
+        <li><strong>Faster</strong> processing, less memory usage</li>
+        <li>Colour is often irrelevant for shape/edge detection</li>
+        <li>Simpler mathematics for feature extraction</li>
+      </ul>
+      <div class="exam-line">"Grayscale reduces image complexity and improves processing efficiency by removing redundant colour information."</div>
+    </div>
+
+    <div class="card">
+      <h3>Image Tasks — Comparison</h3>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <div class="label">Classification</div>
+          <div class="val">One label</div>
+          <div class="desc">Image → "Cat" — single object identified per image</div>
+        </div>
+        <div class="compare-card">
+          <div class="label">Detection</div>
+          <div class="val">Many + location</div>
+          <div class="desc">Finds multiple objects + draws bounding boxes around each</div>
+        </div>
+        <div class="compare-card">
+          <div class="label">Segmentation</div>
+          <div class="val">Pixel-level</div>
+          <div class="desc">Divides image into labelled regions at pixel level</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Occlusion</h3>
+      <ul class="tight">
+        <li>When an object is <strong>partially hidden</strong> in an image</li>
+        <li>Example: face covered by a mask, car behind a tree</li>
+        <li>Real-world images are rarely perfect — occlusion is common</li>
+        <li>Key challenge: models must still recognize partially visible objects</li>
+      </ul>
+      <div class="exam-line">"Occlusion handling improves model robustness in real-world conditions."</div>
+    </div>
+
+    <div class="card">
+      <h3>Segmentation Types</h3>
+      <ul class="tight">
+        <li><strong>Semantic Segmentation</strong> — all objects of same class get same colour label (all cars = blue)</li>
+        <li><strong>Instance Segmentation</strong> — each individual object gets a unique label (Car 1, Car 2, Car 3…)</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════ PROCESS ═══════════════ -->
+  <div id="tab-process" class="tab-content">
+
+    <div class="card">
+      <h3>Image Processing Pipeline</h3>
+      <div class="steps-row">
+        <div class="step-box">Image Capture</div>
+        <span class="step-arrow">→</span>
+        <div class="step-box">Convert to Pixels</div>
+        <span class="step-arrow">→</span>
+        <div class="step-box">Grayscale / Normalise</div>
+        <span class="step-arrow">→</span>
+        <div class="step-box">Feature Extraction</div>
+        <span class="step-arrow">→</span>
+        <div class="step-box">Model Prediction</div>
+      </div>
+      <div style="font-size:12.5px; color:#6b7280; margin-top:8px;">Each stage progressively simplifies and structures raw visual data for the model.</div>
+    </div>
+
+    <div class="card">
+      <h3>Basic Preprocessing Steps</h3>
+      <ul class="tight">
+        <li><strong>Resizing</strong> — standardise image dimensions (e.g. 224×224)</li>
+        <li><strong>Normalisation</strong> — scale pixel values to 0–1 range</li>
+        <li><strong>Noise removal</strong> — blur/filter to remove unwanted artifacts</li>
+        <li><strong>Grayscale conversion</strong> — reduce from 3 channels to 1</li>
+        <li><strong>Thresholding</strong> — convert to binary (black/white) image</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Feature Extraction — What Machines Look For</h3>
+      <table class="def-table">
+        <tr><td>Edges</td><td>Boundaries between regions; areas of sharp intensity change</td></tr>
+        <tr><td>Corners</td><td>Points where two or more edges meet sharply</td></tr>
+        <tr><td>Textures</td><td>Repeating patterns within a region (e.g. fur, fabric)</td></tr>
+        <tr><td>Shapes</td><td>Geometric forms — circles, rectangles, curves</td></tr>
+      </table>
+      <div style="font-size:13px; color:#4b5563; margin-top:10px;">
+        Example: A face = jaw edges + eye curves + nose shape → combined into a "face" feature map
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Challenges in Computer Vision</h3>
+      <ul class="tight">
+        <li><strong>Lighting conditions</strong> — too dark or overexposed images degrade accuracy</li>
+        <li><strong>Occlusion</strong> — partially hidden objects are harder to classify</li>
+        <li><strong>Background noise</strong> — cluttered scenes confuse models</li>
+        <li><strong>Scale variation</strong> — same object at different sizes or viewing angles</li>
+        <li><strong>Real-time processing</strong> — speed vs accuracy trade-off</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════ APPLICATIONS ═══════════════ -->
+  <div id="tab-applications" class="tab-content">
+
+    <div class="section-label">Real-life Examples (Detailed)</div>
+
+    <div class="real-card">
+      <div class="real-icon">📱</div>
+      <div>
+        <div class="real-title">Face Unlock on Smartphones</div>
+        <div class="real-desc">Camera captures face → converts to pixel map → grayscale preprocessing → extracts facial features (jaw, eyes, nose) → matches against stored feature template → unlocks device. Uses both Classification and Detection.</div>
+      </div>
+    </div>
+
+    <div class="real-card">
+      <div class="real-icon">🏥</div>
+      <div>
+        <div class="real-title">Medical Imaging (X-ray / MRI Analysis)</div>
+        <div class="real-desc">CV models detect tumours, fractures, or anomalies in medical scans. Grayscale images are processed to highlight unusual regions. Often faster and more consistent than manual review by radiologists.</div>
+      </div>
+    </div>
+
+    <div class="section-label">Other Applications</div>
+    <div class="apps-grid">
+      <div class="app-tile">
+        <div class="emoji">🚗</div>
+        <div class="t">Self-driving Cars</div>
+        <div class="d">Detect roads, pedestrians, traffic signals in real time</div>
+      </div>
+      <div class="app-tile">
+        <div class="emoji">🔐</div>
+        <div class="t">Surveillance</div>
+        <div class="d">CCTV motion detection, crowd monitoring, intruder alerts</div>
+      </div>
+      <div class="app-tile">
+        <div class="emoji">🛒</div>
+        <div class="t">Retail</div>
+        <div class="d">Automated checkouts, shelf stock monitoring</div>
+      </div>
+      <div class="app-tile">
+        <div class="emoji">🏭</div>
+        <div class="t">Manufacturing</div>
+        <div class="d">Defect detection on assembly lines using object detection</div>
+      </div>
+      <div class="app-tile">
+        <div class="emoji">🌾</div>
+        <div class="t">Agriculture</div>
+        <div class="d">Crop disease detection from drone/satellite images</div>
+      </div>
+      <div class="app-tile">
+        <div class="emoji">🎮</div>
+        <div class="t">Gaming / AR</div>
+        <div class="d">Body tracking, gesture recognition, augmented reality overlays</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════ QUIZ ═══════════════ -->
+  <div id="tab-quiz" class="tab-content">
+
+    <div style="font-size:13px; color:#6b7280; margin-bottom:1rem;">Select an answer for each question — instant feedback provided.</div>
+
+    <!-- Q1 -->
+    <div class="quiz-item" id="q1">
+      <div class="quiz-q">1. What is the pixel value range in a grayscale image?</div>
+      <button class="quiz-opt" onclick="answer(this,'q1',false)">A. &nbsp;0 to 100</button>
+      <button class="quiz-opt" onclick="answer(this,'q1',true)">B. &nbsp;0 to 255</button>
+      <button class="quiz-opt" onclick="answer(this,'q1',false)">C. &nbsp;1 to 256</button>
+      <button class="quiz-opt" onclick="answer(this,'q1',false)">D. &nbsp;−128 to 127</button>
+      <div class="quiz-feedback" id="fb-q1"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="quiz-item" id="q2">
+      <div class="quiz-q">2. Which task finds multiple objects AND their positions in an image?</div>
+      <button class="quiz-opt" onclick="answer(this,'q2',false)">A. &nbsp;Image classification</button>
+      <button class="quiz-opt" onclick="answer(this,'q2',false)">B. &nbsp;Grayscale conversion</button>
+      <button class="quiz-opt" onclick="answer(this,'q2',true)">C. &nbsp;Object detection</button>
+      <button class="quiz-opt" onclick="answer(this,'q2',false)">D. &nbsp;Noise removal</button>
+      <div class="quiz-feedback" id="fb-q2"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="quiz-item" id="q3">
+      <div class="quiz-q">3. Why is grayscale preferred over RGB for basic image processing?</div>
+      <button class="quiz-opt" onclick="answer(this,'q3',false)">A. &nbsp;It stores more colour information</button>
+      <button class="quiz-opt" onclick="answer(this,'q3',false)">B. &nbsp;It produces higher resolution images</button>
+      <button class="quiz-opt" onclick="answer(this,'q3',true)">C. &nbsp;It reduces data and speeds up processing</button>
+      <button class="quiz-opt" onclick="answer(this,'q3',false)">D. &nbsp;It improves colour accuracy of the model</button>
+      <div class="quiz-feedback" id="fb-q3"></div>
+    </div>
+
+    <div class="score-bar" id="score-bar"></div>
+
+  </div><!-- end quiz -->
+
+</div><!-- end container -->
+
+<script>
+  var scores = {};
+
+  var explanations = {
+    q1: "Correct! Grayscale pixels range from 0 (pure black) to 255 (pure white) — 256 possible intensity levels.",
+    q2: "Correct! Object detection outputs class labels + bounding box coordinates for multiple objects in one image.",
+    q3: "Correct! Grayscale has 1 channel vs 3 for RGB — 3× less data means faster computation and lower memory."
+  };
+
+  function showTab(id, btn) {
+    document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelectorAll('.tab-btn').forEach(function(el) { el.classList.remove('active'); });
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function answer(btn, qid, isCorrect) {
+    var item = document.getElementById(qid);
+    var opts = item.querySelectorAll('.quiz-opt');
+    opts.forEach(function(o) { o.disabled = true; });
+
+    btn.classList.add(isCorrect ? 'correct' : 'wrong');
+    if (!isCorrect) {
+      opts.forEach(function(o) {
+        if (o.onclick && o.onclick.toString().indexOf('true') !== -1) {
+          o.classList.add('correct');
+        }
+      });
+    }
+
+    var fb = document.getElementById('fb-' + qid);
+    fb.textContent = isCorrect ? '✓ ' + explanations[qid] : '✗ Not quite. ' + explanations[qid];
+    fb.className = 'quiz-feedback show ' + (isCorrect ? 'pass' : 'fail');
+
+    scores[qid] = isCorrect ? 1 : 0;
+
+    if (Object.keys(scores).length === 3) {
+      var total = scores.q1 + scores.q2 + scores.q3;
+      var msg = total === 3
+        ? '🎉 Score: 3 / 3 — Excellent! Full marks.'
+        : total === 2
+        ? '👍 Score: 2 / 3 — Good. Review the one you missed.'
+        : '📖 Score: ' + total + ' / 3 — Keep revising. You\'ll get there!';
+      var bar = document.getElementById('score-bar');
+      bar.textContent = msg;
+      bar.style.display = 'block';
+    }
+  }
+</script>
+
+</body>
+</html>
